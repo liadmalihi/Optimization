@@ -1,0 +1,31 @@
+"""Abstract classes. Your classes must inherit from these.
+"""
+
+
+class AbstractPlayer:
+    """Your player must inherit from this class, and your player class name must be 'Player', as in the given examples.
+Like this: 'class Player(abstract.AbstractPlayer):'
+    """
+    def __init__(self, setup_time, player_color, time_per_turn):
+        """Player initialization.
+
+        :param setup_time: Allowed setup time in seconds, float.
+        :param player_color: A String representing this player's color.
+        :param time_per_turn: Allowed move calculation time per k turns.
+        """
+        self.setup_time = setup_time
+        self.color = player_color
+        self.time_per_turn = time_per_turn
+
+    def get_move(self, game_state, possible_moves):
+        """Chooses an action from the given actions.
+
+        :param game_state: The current board state. It's always an amazons_board.amazonsBoard object.
+        :param possible_moves: A list of possible moves.
+        :return: The desired move in the list of possible moves.
+        """
+        raise NotImplementedError
+
+    def __repr__(self):
+        return self.color
+
