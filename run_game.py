@@ -2,6 +2,7 @@
 A generic turn-based game runner.
 """
 import sys
+import time
 import tracemalloc
 import players.interactive_player
 from connect_4.board import GameState
@@ -62,13 +63,9 @@ class GameRunner:
 
     def show_graph(self):
 
-        labels = ['3 sec','5 sec','7 sec']
-        men_means = [16,18,20]
-        women_means = [4,2,0]
-
-        # labels = ['3 sec']
-        # men_means = [self.winnerRed]
-        # women_means = [self.winnerBlack]
+        labels = ['3 sec']
+        men_means = [self.winnerRed]
+        women_means = [self.winnerBlack]
 
         x = np.arange(len(labels))  # the label locations
         width = 0.3  # the width 1of the bars
@@ -116,17 +113,10 @@ class GameRunner:
                 if not possible_moves:
                     winner = TIE
                     break
-                # tracemalloc.start()
-                print(sys.getsizeof(possible_moves))
+
                 # Get move from player
                 move = utils.run_with_limited_time(
                     player.get_move, (board_state, possible_moves), {}, time_limit=player.time_per_turn * 1.5)
-                # displaying the memory
-                # print(tracemalloc.get_traced_memory()+":::::: player "+PLAYER_NAME[board_state.curr_player])
-                #
-                # # stopping the library
-                # tracemalloc.stop()
-                print(sys.getsizeof(move))
                 print(repr(player) + " " + PLAYER_NAME[board_state.curr_player] + ' performed the move: ' + str(move))
 
                 board_state, possible_winner = board_state.perform_move(move)
@@ -144,7 +134,7 @@ class GameRunner:
             else:
                 self.winnerBlack=self.winnerBlack+1
 
-        self.show_graph()
+        # self.show_graph()
         return winner
 
     @staticmethod
@@ -156,11 +146,18 @@ class GameRunner:
 
 
 if __name__ == '__main__':
-
+    # tracemalloc.start()
+    # start_time = time.time()
     try:
-        GameRunner(*sys.argv[1:]).run()
+        runner=GameRunner(*sys.argv[1:]).run()
     except TypeError:
         print("""Syntax: {0} setup_time time_per_turn verbose red_player black_player
 For example: {0} 2 10 interactive random_player
 Please read the docs in the code for more info.""".
               format(sys.argv[0]))
+    # print(sys.getsizeof(runner))
+    # print(tracemalloc.get_traced_memory())
+    #
+    # # stopping the library
+    # tracemalloc.stop()
+    # print("run time mcst: %s seconds" % (time.time() - start_time))
